@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>致黄悦颖</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23C25B63' d='M12 21s-7.5-4.9-10-9.2C.4 8.6 2.3 5 5.7 5c2 0 3.4 1.1 4.3 2.4h4c.9-1.3 2.3-2.4 4.3-2.4 3.4 0 5.3 3.6 3.7 6.8C19.5 16.1 12 21 12 21z'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --cream:#F7F1EA;
+    --paper:#FFFDF9;
+    --ink:#4A2C2A;
+    --rose:#C25B63;
+    --rose-dark:#A8444E;
+    --line:#EAD9CF;
+    --muted:#8A6A66;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:480px;margin:0 auto;padding:0 22px;position:relative;z-index:2;}
+
+  /* 背景粒子 */
+  #heartCanvas{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+  /* ===== 首屏 ===== */
+  .hero{padding:64px 0 34px;text-align:center;}
+  .hero .date-tag{
+    display:inline-block;font-size:13px;letter-spacing:.18em;color:var(--rose-dark);
+    border:1px solid var(--line);border-radius:999px;padding:6px 16px;background:rgba(255,253,249,.7);
+  }
+  .hero h1{
+    font-family:"Songti SC","STSong","SimSun",serif;
+    font-size:38px;font-weight:600;margin:22px 0 10px;letter-spacing:.08em;
+  }
+  .hero .sub{font-size:15px;color:var(--muted);margin-bottom:30px;}
+  .days-big{
+    font-family:"Songti SC","STSong",serif;
+    font-size:64px;font-weight:700;color:var(--rose-dark);line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .days-big small{font-size:18px;color:var(--muted);font-weight:400;margin-left:6px;}
+  .count-row{display:flex;justify-content:center;gap:10px;margin-top:26px;}
+  .count-cell{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:12px 8px;min-width:74px;
+  }
+  .count-cell .num{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .count-cell .lab{font-size:12px;color:var(--muted);margin-top:4px;}
+  .scroll-hint{margin-top:34px;font-size:13px;color:var(--muted);}
+  .scroll-hint .arrow{display:block;margin-top:6px;font-size:18px;animation:bob 1.8s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  /* ===== 相册 ===== */
+  section{padding:26px 0;}
+  .sec-title{
+    font-family:"Songti SC","STSong",serif;font-size:22px;font-weight:600;
+    text-align:center;margin-bottom:6px;letter-spacing:.06em;
+  }
+  .sec-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:18px;}
+  .gallery{
+    position:relative;border-radius:20px;overflow:hidden;
+    box-shadow:0 10px 30px rgba(120,60,60,.14);
+  }
+  .track{display:flex;transition:transform .35s cubic-bezier(.22,1,.36,1);}
+  .track img{
+    width:100%;flex:0 0 100%;display:block;object-fit:cover;aspect-ratio:3/4;
+    background:#eee;
+  }
+  .dots{display:flex;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;}
+  .dot{width:6px;height:6px;border-radius:50%;background:#D9C2BB;transition:all .25s;}
+  .dot.on{background:var(--rose);width:18px;border-radius:999px;}
+
+  /* ===== 信件 ===== */
+  .letter{
+    background:var(--paper);border:1px solid var(--line);border-radius:22px;
+    padding:28px 24px;box-shadow:0 10px 30px rgba(120,60,60,.10);
+  }
+  .letter .to{
+    font-family:"Songti SC","STSong",serif;font-size:19px;font-weight:600;
+    margin-bottom:18px;color:var(--rose-dark);
+  }
+  .letter p{
+    font-size:15.5px;line-height:2.05;text-align:justify;margin-bottom:16px;
+    text-indent:2em;
+  }
+  .letter .quote{
+    font-family:"Songti SC","STSong",serif;text-align:center;text-indent:0;
+    line-height:2;letter-spacing:.04em;color:var(--rose-dark);
+  }
+  .letter .sign{
+    text-align:right;font-size:15px;margin-top:22px;color:var(--ink);
+    font-family:"Songti SC","STSong",serif;
+  }
+  .letter .love{
+    text-align:center;text-indent:0;font-family:"Songti SC",serif;
+    font-size:17px;color:var(--rose-dark);margin-top:8px;
+  }
+
+  footer{text-align:center;padding:30px 0 46px;font-size:12px;color:var(--muted);}
+
+  /* 音乐按钮 */
+  #musicBtn{
+    position:fixed;right:18px;bottom:22px;z-index:10;
+    width:50px;height:50px;border-radius:50%;border:1px solid var(--line);
+    background:var(--paper);color:var(--rose-dark);font-size:20px;
+    box-shadow:0 6px 18px rgba(120,60,60,.2);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #musicBtn.playing{animation:spin 6s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #musicTip{
+    position:fixed;right:18px;bottom:82px;z-index:10;font-size:12px;color:var(--muted);
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:6px 10px;
+    display:none;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .scroll-hint .arrow,#musicBtn.playing{animation:none;}
+    .track{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="heartCanvas" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+  <!-- 首屏 -->
+  <header class="hero">
+    <span class="date-tag">始于 2026 年 3 月 4 日</span>
+    <h1>致 黄悦颖</h1>
+    <p class="sub">我们在一起的每一天</p>
+    <div class="days-big"><span id="dayNum">0</span><small>天</small></div>
+    <div class="count-row">
+      <div class="count-cell"><div class="num" id="hourNum">0</div><div class="lab">时</div></div>
+      <div class="count-cell"><div class="num" id="minNum">0</div><div class="lab">分</div></div>
+      <div class="count-cell"><div class="num" id="secNum">0</div><div class="lab">秒</div></div>
+    </div>
+    <div class="scroll-hint">往下滑，看看我们的故事<span class="arrow">︾</span></div>
+  </header>
+
+  <!-- 相册 -->
+  <section>
+    <h2 class="sec-title">我们的合照</h2>
+    <p class="sec-sub">左右滑动翻看</p>
+    <div class="gallery">
+      <div class="track" id="track">
+        <img src="assets/photo1.jpg" alt="合照 1">
+        <img src="assets/photo2.jpg" alt="合照 2">
+        <img src="assets/photo3.jpg" alt="合照 3">
+        <img src="assets/photo4.jpg" alt="合照 4">
+        <img src="assets/photo5.jpg" alt="合照 5">
+        <img src="assets/photo6.jpg" alt="合照 6">
+        <img src="assets/photo7.jpg" alt="合照 7">
+        <img src="assets/photo8.jpg" alt="合照 8">
+        <img src="assets/photo9.jpg" alt="合照 9">
+        <img src="assets/photo10.jpg" alt="合照 10">
+        <img src="assets/photo11.jpg" alt="合照 11">
+        <img src="assets/photo12.jpg" alt="合照 12">
+        <img src="assets/photo13.jpg" alt="合照 13">
+      </div>
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <!-- 信件 -->
+  <section>
+    <h2 class="sec-title">想对你说的话</h2>
+    <p class="sec-sub">写在这一页里</p>
+    <div class="letter">
+      <div class="to">to 黄悦颖：</div>
+      <p>我有许多话，不知道怎么和你说。虽然讲起道理来一套一套，但让我认真的说情话，就是绳子一套了。这是我和你在一起的 260 天，一转眼我们就在一起大半个年头了。还记得刚认识的时候，我俩聊天是真有点难唠，我给你发很多信息，你给我回一丢丢，你说你比较慢热，我差点以为是网上的那种，还好你不是，我也信你，坚持下来了。</p>
+      <p>我还记得第一次见你，我不知道怎么说话，有点乱七八糟的，你也不说话，拉我的手，然后你说我手出汗了，其实是你手出汗了。我们在一起那么久，也有很多矛盾。其实很多时候，我们真的都超级厉害，那些问题都能把很多情侣打倒，但我们过去了，而且很完美。</p>
+      <p class="quote">我欲与君相知，长命无绝衰。<br>山无棱，江水为竭，冬雷震震夏雨雪，<br>天地合，乃敢与君绝。</p>
+      <p>我想与你一起再度过 100 个春夏秋冬，也不觉得够。</p>
+      <p class="love">我爱你乖乖！！</p>
+      <div class="sign">—— from 刘越</div>
+    </div>
+  </section>
+
+  <footer>只写给你一个人看</footer>
+</div>
+
+<button id="musicBtn" aria-label="播放音乐">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V5l12-2v13"/>
+    <circle cx="6" cy="18" r="3"/>
+    <circle cx="18" cy="16" r="3"/>
+  </svg>
+</button>
+<div id="musicTip">把《小幸运》mp3 放到 assets/music.mp3 后即可播放</div>
+
+<audio id="bgMusic" loop preload="none" src="assets/music.mp3"></audio>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ===== 倒计时：在一起起始日 ===== */
+  var START = new Date("2026-03-04T00:00:00+08:00").getTime();
+  function pad(n){return n<10?"0"+n:""+n;}
+  function tick(){
+    var now = Date.now();
+    var diff = Math.max(0, now - START);
+    var day = Math.floor(diff / 86400000);
+    var hour = Math.floor(diff % 86400000 / 3600000);
+    var min  = Math.floor(diff % 3600000 / 60000);
+    var sec  = Math.floor(diff % 60000 / 1000);
+    document.getElementById("dayNum").textContent = day;
+    document.getElementById("hourNum").textContent = pad(hour);
+    document.getElementById("minNum").textContent = pad(min);
+    document.getElementById("secNum").textContent = pad(sec);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ===== 相册滑动 ===== */
+  var track = document.getElementById("track");
+  var imgs = track.querySelectorAll("img");
+  var dotsBox = document.getElementById("dots");
+  var idx = 0, total = imgs.length;
+  var dots = [];
+  for(var i=0;i<total;i++){
+    var d=document.createElement("span");
+    d.className="dot"+(i===0?" on":"");
+    dotsBox.appendChild(d);dots.push(d);
+  }
+  function go(i){
+    idx = Math.max(0, Math.min(total-1, i));
+    track.style.transform = "translateX(-"+(idx*100)+"%)";
+    dots.forEach(function(el,k){el.className="dot"+(k===idx?" on":"");});
+  }
+  var startX=0, curX=0, dragging=false;
+  track.addEventListener("touchstart",function(e){
+    dragging=true;startX=e.touches[0].clientX;curX=startX;
+  },{passive:true});
+  track.addEventListener("touchmove",function(e){
+    if(!dragging)return;curX=e.touches[0].clientX;
+  },{passive:true});
+  track.addEventListener("touchend",function(){
+    if(!dragging)return;dragging=false;
+    var dx=curX-startX;
+    if(dx<-50)go(idx+1);else if(dx>50)go(idx-1);else go(idx);
+  });
+  // 桌面鼠标拖动
+  var mouseDown=false;
+  track.addEventListener("mousedown",function(e){mouseDown=true;startX=e.clientX;curX=e.clientX;});
+  window.addEventListener("mousemove",function(e){if(mouseDown)curX=e.clientX;});
+  window.addEventListener("mouseup",function(){
+    if(!mouseDown)return;mouseDown=false;
+    var dx=curX-startX;
+    if(dx<-50)go(idx+1);else if(dx>50)go(idx-1);else go(idx);
+  });
+
+  /* ===== 音乐 ===== */
+  var audio=document.getElementById("bgMusic");
+  var btn=document.getElementById("musicBtn");
+  var tip=document.getElementById("musicTip");
+  var musicMissing=false;
+  audio.addEventListener("error",function(){musicMissing=true;});
+  btn.addEventListener("click",function(){
+    if(musicMissing){tip.style.display="block";setTimeout(function(){tip.style.display="none";},2600);return;}
+    if(audio.paused){audio.play().then(function(){btn.classList.add("playing");}).catch(function(){tip.style.display="block";setTimeout(function(){tip.style.display="none";},2600);});}
+    else{audio.pause();btn.classList.remove("playing");}
+  });
+
+  /* ===== 爱心粒子背景（克制、低透明度） ===== */
+  var canvas=document.getElementById("heartCanvas");
+  var ctx=canvas.getContext("2d");
+  var w,h,hearts=[];
+  var reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;}
+  resize();window.addEventListener("resize",resize);
+  function Heart(){
+    this.x=Math.random()*w;
+    this.y=h+20;
+    this.s=Math.random()*10+5;
+    this.v=Math.random()*0.7+0.35;
+    this.o=Math.random()*0.28+0.12;
+  }
+  Heart.prototype.draw=function(){
+    ctx.save();ctx.globalAlpha=this.o;ctx.fillStyle="#C25B63";
+    var s=this.s,x=this.x,y=this.y;
+    ctx.beginPath();
+    ctx.moveTo(x,y+s*0.3);
+    ctx.bezierCurveTo(x,y,x-s*0.5,y,x-s*0.5,y+s*0.3);
+    ctx.bezierCurveTo(x-s*0.5,y+s*0.6,x,y+s*0.75,x,y+s);
+    ctx.bezierCurveTo(x,y+s*0.75,x+s*0.5,y+s*0.6,x+s*0.5,y+s*0.3);
+    ctx.bezierCurveTo(x+s*0.5,y,x,y,x,y+s*0.3);
+    ctx.fill();ctx.restore();
+  };
+  Heart.prototype.update=function(){this.y-=this.v;};
+  function loop(){
+    ctx.clearRect(0,0,w,h);
+    if(!reduced && Math.random()<0.03)hearts.push(new Heart());
+    for(var i=hearts.length-1;i>=0;i--){
+      hearts[i].update();hearts[i].draw();
+      if(hearts[i].y<-20)hearts.splice(i,1);
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+</body>
+</html>
